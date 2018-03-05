@@ -33,6 +33,12 @@ class ViberDriver extends HttpDriver implements VerifiesService
 
 	const API_ENDPOINT = 'https://chatapi.viber.com/pa/';
 
+	/** @var string */
+	protected $signature;
+
+	/** @var string */
+	protected $content;
+
 	/** @var  DriverEventInterface */
 	protected $driverEvent;
 
@@ -49,8 +55,10 @@ class ViberDriver extends HttpDriver implements VerifiesService
 	{
 
 		$this->payload = new ParameterBag((array) json_decode($request->getContent(), true));
-		$this->event = Collection::make($this->payload->get('event'));
-		$this->config = Collection::make($this->config->get('viber'));
+		$this->event = Collection::make($this->payload->get('event'), []);
+		$this->signature = $request->headers->get('X-Viber-Content-Signature', '');
+		$this->content = $request->getContent();
+		$this->config = Collection::make($this->config->get('viber'), []);
 	}
 
 	/**
@@ -237,6 +245,7 @@ class ViberDriver extends HttpDriver implements VerifiesService
 	 */
 	public function verifyRequest(Request $request)
 	{
-		return hash_equals($request->get('sig'), hash_hmac('sha256',$request->getContent(),$this->config->get('viber')));
+		return hash_equals($this->signature,
+			hash_hmac('sha256', $this->content, $this->config->get('token')));
 	}
 }
