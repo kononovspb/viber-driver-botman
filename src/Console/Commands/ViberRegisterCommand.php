@@ -1,6 +1,6 @@
 <?php
 
-namespace TheArdent\Drivers\Viber\Commands;
+namespace TheArdent\Drivers\Viber\Console\Commands;
 
 use Illuminate\Console\Command;
 
