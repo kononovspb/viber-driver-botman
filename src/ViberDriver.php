@@ -47,7 +47,8 @@ class ViberDriver extends HttpDriver implements VerifiesService
 	 */
 	public function buildPayload(Request $request)
 	{
-		$this->payload = new ParameterBag(json_decode($request->getContent(), true));
+
+		$this->payload = new ParameterBag((array) json_decode($request->getContent(), true));
 		$this->event = Collection::make($this->payload->get('event'));
 		$this->config = Collection::make($this->config->get('viber'));
 	}
