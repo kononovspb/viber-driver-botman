@@ -68,7 +68,6 @@ class ViberRegisterCommand extends Command
 
 		$result = json_decode(file_get_contents($api, false, $context));
 
-
 		$this->info($result->status);
 
 		if (isset($result->status) && $result->status === 0) {
@@ -76,7 +75,7 @@ class ViberRegisterCommand extends Command
 		}
 		else {
 			$this->error(
-				'Something went wrong!Status: ' . $result['status'] . '. Message:' . $result['status_message']
+				'Something went wrong!Status: ' . $result->status . '. Message:' . $result->status_message
 			);
 		}
 	}
