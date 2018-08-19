@@ -19,6 +19,7 @@ use TheArdent\Drivers\Viber\Events\MessageSeen;
 use TheArdent\Drivers\Viber\Events\MessageStarted;
 use TheArdent\Drivers\Viber\Events\UserSubscribed;
 use TheArdent\Drivers\Viber\Events\UserUnsubscribed;
+use TheArdent\Drivers\Viber\Events\Webhook;
 use TheArdent\Drivers\Viber\Extensions\ContactTemplate;
 use TheArdent\Drivers\Viber\Extensions\FileTemplate;
 use TheArdent\Drivers\Viber\Extensions\KeyboardTemplate;
@@ -123,7 +124,7 @@ class ViberDriver extends HttpDriver implements VerifiesService
 				return new MessageSeen($eventData);
 				break;
 			case 'webhook':
-				return new WebhookEvent($eventData);
+				return new Webhook($eventData);
 				break;
 			default:
 				return false;
