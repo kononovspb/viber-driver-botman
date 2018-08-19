@@ -11,5 +11,5 @@ return [
     | the chatbot through Viber.
     |
     */
-    'token' => env('Viber_TOKEN'),
+    'token' => env('VIBER_TOKEN'),
 ];
