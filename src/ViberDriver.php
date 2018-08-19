@@ -37,9 +37,6 @@ class ViberDriver extends HttpDriver implements VerifiesService
 	/** @var string */
 	protected $signature;
 
-	/** @var string */
-	protected $content;
-
 	/** @var  DriverEventInterface */
 	protected $driverEvent;
 
@@ -58,7 +55,6 @@ class ViberDriver extends HttpDriver implements VerifiesService
 		$this->payload = new ParameterBag((array) json_decode($request->getContent(), true));
 		$this->event = Collection::make($this->payload->get('event'), []);
 		$this->signature = $request->headers->get('X-Viber-Content-Signature', '');
-		$this->content = $request->getContent();
 		$this->config = Collection::make($this->config->get('viber'), []);
 	}
 
