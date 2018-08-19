@@ -122,6 +122,9 @@ class ViberDriver extends HttpDriver implements VerifiesService
 			case 'seen':
 				return new MessageSeen($eventData);
 				break;
+			case 'webhook':
+				return new WebhookEvent($eventData);
+				break;
 			default:
 				return false;
 				break;
