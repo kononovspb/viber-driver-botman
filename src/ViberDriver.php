@@ -3,7 +3,6 @@
 namespace TheArdent\Drivers\Viber;
 
 use BotMan\BotMan\Interfaces\DriverEventInterface;
-use BotMan\BotMan\Interfaces\VerifiesService;
 use BotMan\BotMan\Users\User;
 use Illuminate\Support\Collection;
 use BotMan\BotMan\Drivers\HttpDriver;
@@ -28,7 +27,7 @@ use TheArdent\Drivers\Viber\Extensions\LocationTemplate;
 use TheArdent\Drivers\Viber\Extensions\PictureTemplate;
 use TheArdent\Drivers\Viber\Extensions\VideoTemplate;
 
-class ViberDriver extends HttpDriver implements VerifiesService
+class ViberDriver extends HttpDriver
 {
 	const DRIVER_NAME = 'Viber';
 
@@ -236,16 +235,5 @@ class ViberDriver extends HttpDriver implements VerifiesService
 		}
 
 		return $this->botId;
-	}
-
-	/**
-	 * @param Request $request
-	 *
-	 * @return bool
-	 */
-	public function verifyRequest(Request $request)
-	{
-		return hash_equals($this->signature,
-			hash_hmac('sha256', $this->content, $this->config->get('token')));
 	}
 }
