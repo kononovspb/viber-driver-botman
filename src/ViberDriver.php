@@ -12,6 +12,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use BotMan\BotMan\Messages\Incoming\IncomingMessage;
+use BotMan\BotMan\Messages\Attachments\Audio;
+use BotMan\BotMan\Messages\Attachments\File;
+use BotMan\BotMan\Messages\Attachments\Image;
+use BotMan\BotMan\Messages\Attachments\Location;
+use BotMan\BotMan\Messages\Attachments\Video;
+use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
 use TheArdent\Drivers\Viber\Events\MessageDelivered;
 use TheArdent\Drivers\Viber\Events\MessageFailed;
 use TheArdent\Drivers\Viber\Events\MessageSeen;
@@ -150,6 +156,30 @@ class ViberDriver extends HttpDriver
 	}
 
 	/**
+	 * Convert a Question object
+	 *
+	 * @param Question $question
+	 * @return array
+	 */
+	private function convertQuestion(Question $question)
+	{
+		$actions = $question->getActions();
+		if (count($actions) > 0 ) {
+			$keyboard = new KeyboardTemplate($question->getText());
+			foreach($actions as $action) {
+				$action = $action->toArray();
+				$keyboard->addButton($action['text'], 'reply', $action['value'] ?? $action['text']);
+			}
+			return $keyboard->jsonSerialize();
+		}
+
+		return [
+			'text' => $question->getText(),
+			'type' => 'text'
+		];
+	}
+
+	/**
 	 * @param string|Question|IncomingMessage $message
 	 * @param \BotMan\BotMan\Messages\Incoming\IncomingMessage $matchingMessage
 	 * @param array $additionalParameters
@@ -158,14 +188,35 @@ class ViberDriver extends HttpDriver
 	public function buildServicePayload($message, $matchingMessage, $additionalParameters = [])
 	{
 		$parameters = array_merge_recursive([
-			                                    'receiver' => $matchingMessage->getSender(),
-		                                    ], $additionalParameters);
+			'receiver' => $matchingMessage->getSender(),
+		], $additionalParameters);
 
-		/*
-		 * If we send a Question with buttons, ignore
-		 * the text and append the question.
-		 */
-		if ($message instanceof \JsonSerializable) {
+		if ($message instanceof Question) {
+			$parameters = array_merge_recursive($this->convertQuestion($message), $additionalParameters);
+		} elseif ($message instanceof OutgoingMessage) {
+			$attachment = $message->getAttachment();
+			if (! is_null($attachment)) {
+				$attachmentType = strtolower(basename(str_replace('\\', '/', get_class($attachment))));
+				if ($attachmentType == 'image' && $attachment instanceof Image) {
+					$template = new PictureTemplate($attachment->getUrl(), $attachment->getTitle());
+				} elseif ($attachmentType == 'video' && $attachment instanceof Video) {
+					$template = new VideoTemplate($attachment->getUrl());
+				} elseif ($attachmentType == 'audio' && $attachment instanceof Audio) {
+					$template = new FileTemplate($attachment->getUrl(), uniqid().($ext=pathinfo($attachment->getUrl(), PATHINFO_EXTENSION))?'.'.$ext:'');
+				} elseif ($attachmentType == 'file' && $attachment instanceof File) {
+					$template = new FileTemplate($attachment->getUrl(), uniqid().($ext=pathinfo($attachment->getUrl(), PATHINFO_EXTENSION))?'.'.$ext:'');
+				} elseif ($attachmentType == 'location' && $attachment instanceof Location) {
+					$template = new LocationTemplate($attachment->getLatitude(), $attachment->getLongitude());
+				}
+
+				if (isset($template)) {
+					$parameters = array_merge($template->jsonSerialize(), $parameters);
+				}
+			} else {
+				$parameters['text'] = $message->getText();
+				$parameters['type'] = 'text';
+			}
+		} elseif ($message instanceof \JsonSerializable) {
 			$parameters = array_merge($message->jsonSerialize(),$parameters);
 		} else {
 			$parameters['text'] = $message->getText();
