@@ -167,7 +167,6 @@ class ViberDriver extends HttpDriver
 		if (count($actions) > 0 ) {
 			$keyboard = new KeyboardTemplate($question->getText());
 			foreach($actions as $action) {
-				$action = $action->toArray();
 				$keyboard->addButton($action['text'], 'reply', $action['value'] ?? $action['text']);
 			}
 			return $keyboard->jsonSerialize();
@@ -192,7 +191,7 @@ class ViberDriver extends HttpDriver
 		], $additionalParameters);
 
 		if ($message instanceof Question) {
-			$parameters = array_merge_recursive($this->convertQuestion($message), $additionalParameters);
+			$parameters = array_merge_recursive($this->convertQuestion($message), $parameters);
 		} elseif ($message instanceof OutgoingMessage) {
 			$attachment = $message->getAttachment();
 			if (! is_null($attachment)) {
