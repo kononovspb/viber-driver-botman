@@ -90,7 +90,7 @@ class ViberDriver extends HttpDriver
 	 */
 	public function hasMatchingEvent()
 	{
-		$event = $this->getEventFromEventData($this->event->toArray());
+		$event = $this->getEventFromEventData($this->payload->all());
 		if ($event) {
 			$this->driverEvent = $event;
 			return $this->driverEvent;
