@@ -18,15 +18,18 @@ class KeyboardTemplate implements JsonSerializable
 	 */
 	protected $buttons;
 
+	protected $defaultHeight;
+
 	/**
 	 * PictureTemplate constructor.
 	 *
 	 * @param string $imageUrl
 	 * @param string $text
 	 */
-	public function __construct($text)
+	public function __construct($text, $defaultHeight = true)
 	{
 		$this->text = $text;
+		$this->defaultHeight = $defaultHeight;
 	}
 
 	/**
@@ -39,7 +42,7 @@ class KeyboardTemplate implements JsonSerializable
 			'text'     => $this->text,
 			'keyboard' => [
 				'Type'          => 'keyboard',
-				'DefaultHeight' => true,
+				'DefaultHeight' => $this->defaultHeight,
 				'Buttons'       => $this->buttons
 			]
 		];
@@ -51,13 +54,18 @@ class KeyboardTemplate implements JsonSerializable
 	 * @param string $actionBody
 	 * @param string $textSize
 	 */
-	public function addButton($text, $actionType = 'reply', $actionBody = 'reply to me', $textSize = 'regular')
+	public function addButton($text, $actionType = 'reply', $actionBody = 'reply to me', $textSize = 'regular', $color = null)
 	{
-		$this->buttons[] = [
+		$btn = [
 			"ActionType" => $actionType,
 			"ActionBody" => $actionBody,
 			"Text"       => $text,
 			"TextSize"   => $textSize,
 		];
+		if ($color) {
+			$btn["BgColor"] = $color;
+		}
+		$this->buttons[] = $btn;
+		return $this;
 	}
 }

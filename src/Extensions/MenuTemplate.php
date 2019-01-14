@@ -19,15 +19,18 @@ class MenuTemplate implements JsonSerializable {
 
     protected $imageUrl;
 
+    protected $defaultHeight;
+
     /**
      * PictureTemplate constructor.
      *
      * @param string $imageUrl
      * @param string $text
      */
-    public function __construct($text, $imageUrl) {
+    public function __construct($text, $imageUrl, $defaultHeight = false) {
         $this->text = $text;
         $this->imageUrl = $imageUrl;
+        $this->defaultHeight = $defaultHeight;
     }
 
     /**
@@ -40,7 +43,7 @@ class MenuTemplate implements JsonSerializable {
             'media' => $this->imageUrl,
             'keyboard' => [
                 'Type' => 'keyboard',
-                'DefaultHeight' => false,
+                'DefaultHeight' => $this->defaultHeight,
                 'Buttons' => $this->buttons
             ]
         ];
@@ -54,13 +57,17 @@ class MenuTemplate implements JsonSerializable {
      *
      * @return ViberMenuTemplate
      */
-    public function addButton($text, $actionType = 'reply', $actionBody = 'reply to me', $textSize = 'regular') {
-        $this->buttons[] = [
+    public function addButton($text, $actionType = 'reply', $actionBody = 'reply to me', $textSize = 'regular', $color = null) {
+        $btn = [
             "ActionType" => $actionType,
             "ActionBody" => $actionBody,
-            "Text" => $text,
-            "TextSize" => $textSize,
+            "Text"       => $text,
+            "TextSize"   => $textSize,
         ];
+        if ($color) {
+            $btn["BgColor"] = $color;
+        }
+        $this->buttons[] = $btn;
         return $this;
     }
 
