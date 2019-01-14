@@ -150,7 +150,10 @@ class ViberDriver extends HttpDriver
 	 */
 	public function getMessages()
 	{
-		$user = $this->payload->get('sender') ? $this->payload->get('sender')['id'] : $this->payload->get('user')['id'];
+		$user = $this->payload->get('sender') ? $this->payload->get('sender')['id'] : ($this->payload->get('user')['id'] ?? null);
+		if ($user === null) {
+			return [];
+		}
 		if (isset($this->payload->get('message')['text'])) {
 			$message = new IncomingMessage($this->payload->get('message')['text'], $user, $this->getBotId(), $this->payload);
 		} else {
