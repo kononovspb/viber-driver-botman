@@ -26,7 +26,7 @@ class KeyboardTemplate implements JsonSerializable
 	 * @param string $imageUrl
 	 * @param string $text
 	 */
-	public function __construct($text, $defaultHeight = true)
+	public function __construct($text, $defaultHeight = false)
 	{
 		$this->text = $text;
 		$this->defaultHeight = $defaultHeight;
