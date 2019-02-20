@@ -156,6 +156,15 @@ class ViberDriver extends HttpDriver
 		}
 		if (isset($this->payload->get('message')['text'])) {
 			$message = new IncomingMessage($this->payload->get('message')['text'], $user, $this->getBotId(), $this->payload);
+		} elseif ($this->payload->get('message')['type'] == 'location') {
+			$message = new IncomingMessage(Location::PATTERN, $user, $this->getBotId(), $this->payload);
+			$message->setLocation(
+				new Location(
+					$this->payload->get('message')['location']['lat'],
+					$this->payload->get('message')['location']['lon'],
+					$this->payload->get('message')['location']
+				)
+			);
 		} else {
 			$message = new IncomingMessage('', $user, $this->getBotId(), $this->payload);
 		}
