@@ -54,9 +54,11 @@ class KeyboardTemplate implements JsonSerializable
 	 * @param string $actionBody
 	 * @param string $textSize
 	 */
-	public function addButton($text, $actionType = 'reply', $actionBody = 'reply to me', $textSize = 'regular', $color = null)
+	public function addButton($text, $actionType = 'reply', $actionBody = 'reply to me', $textSize = 'regular', $color = null, $width = 6)
 	{
 		$btn = [
+			"Columns"    => $width,
+			"Rows"       => 1,
 			"ActionType" => $actionType,
 			"ActionBody" => $actionBody,
 			"Text"       => $text,
