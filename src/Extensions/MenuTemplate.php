@@ -57,7 +57,7 @@ class MenuTemplate implements JsonSerializable {
      *
      * @return ViberMenuTemplate
      */
-    public function addButton($text, $actionType = 'reply', $actionBody = 'reply to me', $textSize = 'regular', $color = null, $width = 6) {
+    public function addButton($text, $actionType = 'reply', $actionBody = 'reply to me', $textSize = 'regular', $color = null, $width = 6, $silent = false) {
         $btn = [
             "Columns"    => $width,
 			"Rows"       => 1,
@@ -65,6 +65,7 @@ class MenuTemplate implements JsonSerializable {
             "ActionBody" => $actionBody,
             "Text"       => $text,
             "TextSize"   => $textSize,
+            "Silent"     => $silent
         ];
         if ($color) {
             $btn["BgColor"] = $color;
