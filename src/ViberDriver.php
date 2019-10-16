@@ -204,6 +204,14 @@ class ViberDriver extends HttpDriver
         ];
     }
 
+    public function requestContactKeyboard($buttonText)
+    {
+        $keyboard = new KeyboardTemplate($buttonText);
+        $keyboard->addButton($buttonText, 'share-phone', 'reply');
+
+        return $keyboard->jsonSerialize();
+    }
+
     /**
      * @param string|Question|IncomingMessage                  $message
      * @param \BotMan\BotMan\Messages\Incoming\IncomingMessage $matchingMessage
