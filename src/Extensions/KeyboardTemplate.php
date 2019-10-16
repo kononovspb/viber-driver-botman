@@ -38,6 +38,7 @@ class KeyboardTemplate implements JsonSerializable
 	public function jsonSerialize()
 	{
 		return [
+		    'min_api_version' => 3,
 			'type'     => $this->type,
 			'text'     => $this->text,
 			'keyboard' => [
@@ -50,7 +51,7 @@ class KeyboardTemplate implements JsonSerializable
 
 	/**
 	 * @param        $text
-	 * @param string $actionType
+	 * @param string $actionType Supported: reply, open-url, location-picker, share-phone, none
 	 * @param string $actionBody
 	 * @param string $textSize
 	 */
