@@ -134,14 +134,17 @@ class ViberDriver extends HttpDriver
 		}
 	}
 
-	/**
-	 * @param  \BotMan\BotMan\Messages\Incoming\IncomingMessage $message
-	 * @return Answer
-	 */
-	public function getConversationAnswer(IncomingMessage $message)
-	{
-		return Answer::create($message->getText())->setMessage($message);
-	}
+    /**
+     * @param \BotMan\BotMan\Messages\Incoming\IncomingMessage $message
+     *
+     * @return Answer
+     */
+    public function getConversationAnswer(IncomingMessage $message)
+    {
+        $text = $message->getText();
+        return Answer::create($text)->setMessage($message)
+            ->setValue($text);
+    }
 
 	/**
 	 * Retrieve the chat message.
@@ -172,22 +175,27 @@ class ViberDriver extends HttpDriver
 		return [$message];
 	}
 
-	/**
-	 * Convert a Question object
-	 *
-	 * @param Question $question
-	 * @return array
-	 */
-	private function convertQuestion(Question $question)
-	{
-		$actions = $question->getActions();
-		if (count($actions) > 0 ) {
-			$keyboard = new KeyboardTemplate($question->getText());
-			foreach($actions as $action) {
-				$keyboard->addButton($action['text'], 'reply', $action['value'] ?? $action['text']);
-			}
-			return $keyboard->jsonSerialize();
-		}
+    /**
+     * Convert a Question object
+     *
+     * @param Question $question
+     *
+     * @return array
+     */
+    protected function convertQuestion(Question $question)
+    {
+        $actions = $question->getActions();
+        if (count($actions) > 0) {
+            $keyboard = new KeyboardTemplate($question->getText());
+            foreach ($actions as $action) {
+                $text = $action['text'];
+                $actionType = $action['additional']['url'] ? 'open-url' : 'reply';
+                $actionBody = $action['additional']['url'] ?? $action['value'] ?? $action['text'];
+                $silent = $action['additional']['url'] ? true : false;
+                $keyboard->addButton($text, $actionType, $actionBody,'regular', null, 6, $silent);
+            }
+            return $keyboard->jsonSerialize();
+        }
 
 		return [
 			'text' => $question->getText(),
@@ -259,19 +267,26 @@ class ViberDriver extends HttpDriver
 		return ! is_null($this->config->get('token'));
 	}
 
-	/**
-	 * Retrieve User information.
-	 * @param \BotMan\BotMan\Messages\Incoming\IncomingMessage $matchingMessage
-	 * @return User
-	 */
-	public function getUser(IncomingMessage $matchingMessage)
-	{
-		$personId = $matchingMessage->getSender();
-		$response = $this->http->post(self::API_ENDPOINT.'get_user_details',[],['id' => $personId], $this->getHeaders());
-		$userInfo = Collection::make(json_decode($response->getContent(), true)['user']);
+    /**
+     * Retrieve User information.
+     *
+     * @param \BotMan\BotMan\Messages\Incoming\IncomingMessage $matchingMessage
+     *
+     * @return User
+     */
+    public function getUser(IncomingMessage $matchingMessage)
+    {
+        $personId = $matchingMessage->getSender();
+        /** @var ParameterBag $payload */
+        $payload = $matchingMessage->getPayload();
+        $name = $payload->get('sender')['name'];
+        list($firstName, $lastName) = explode(' ', trim($name), 2);
+        /*$response = $this->http->post(self::API_ENDPOINT . 'get_user_details', [], ['id' => $personId],
+            $this->getHeaders());
+        $userInfo = Collection::make(json_decode($response->getContent(), true)['user']);*/
 
-		return new User($userInfo->get('id'), $userInfo->get('name'), null, $userInfo->get('name'), $userInfo->toArray());
-	}
+        return new User($personId, $firstName, $lastName, $name, $payload->all());
+    }
 
 
 	/**
