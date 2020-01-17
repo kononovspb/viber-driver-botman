@@ -1,5 +1,5 @@
 {
-  "name": "adellantado/botman-viber-driver",
+  "name": "polyskalov/botman-viber-driver",
   "license": "MIT",
   "description": "Viber driver for BotMan",
   "keywords": [
@@ -8,7 +8,7 @@
     "Viber",
     "Messenger"
   ],
-  "homepage": "https://github.com/TheArdent/botman-viber-driver",
+  "homepage": "https://github.com/polyskalov/botman-viber-driver",
   "authors": [
     {
       "name": "Oleksii Yaryi",
