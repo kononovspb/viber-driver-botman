@@ -1,2 +1,5 @@
-/.idea/
-.idea
+.idea/
+.DS_Store
+composer.lock
+.php_cs.cache
+/vendor/
