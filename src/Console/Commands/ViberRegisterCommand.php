@@ -35,7 +35,7 @@ class ViberRegisterCommand extends Command
 	 */
 	public function handle()
 	{
-		$callbackUrl = $this->ask('What is the target url for the Viber bot?');
+		$callbackUrl = $this->ask('What is the target url for the Viber bot?', url('/botman'));
 		$api = 'https://chatapi.viber.com/pa/set_webhook';
 
 		$postdata = json_encode(
