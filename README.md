@@ -1,14 +1,11 @@
 # BotMan Viber Driver
 Connect Viber with [BotMan](http://botman.io/)
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/polyskalov/botman-viber-driver.svg?style=flat-square)](https://packagist.org/packages/polyskalov/botman-viber-driver)
-
-
 ## Installation & Setup
 First you need to pull in the Viber Driver.
 
 ```console
-composer require polyskalov/botman-viber-driver
+composer require kononovspb/botman-viber-driver
 ```
 Then load the driver before creating the BotMan instance (only when you don't use BotMan Studio):
 
