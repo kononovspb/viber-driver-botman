@@ -1,5 +1,5 @@
 {
-  "name": "polyskalov/botman-viber-driver",
+  "name": "kononovspb/botman-viber-driver",
   "license": "MIT",
   "description": "Viber driver for BotMan",
   "keywords": [
@@ -8,11 +8,11 @@
     "Viber",
     "Messenger"
   ],
-  "homepage": "https://github.com/polyskalov/botman-viber-driver",
+  "homepage": "https://github.com/kononovspb/viber-driver-botman",
   "authors": [
     {
-      "name": "Oleksii Yaryi",
-      "email": "oleksii.yaryi@gmail.com"
+      "name": "Alexey Kononov",
+      "email": "info@kononov.spb.ru"
     }
   ],
   "require": {
@@ -26,7 +26,7 @@
   },
   "autoload": {
     "psr-4": {
-      "TheArdent\\Drivers\\Viber\\": "src/"
+      "Kononovspb\\Drivers\\Viber\\": "src/"
     }
   },
   "autoload-dev": {
