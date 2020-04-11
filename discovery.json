@@ -3,9 +3,9 @@
         "stubs/viber.php"
     ],
     "botman/driver": [
-        "TheArdent\\Drivers\\Viber\\ViberDriver"
+        "Kononovspb\\Drivers\\Viber\\ViberDriver"
     ],
     "botman/commands": [
-        "TheArdent\\Drivers\\Viber\\Console\\Commands\\ViberRegisterCommand"
+        "Kononovspb\\Drivers\\Viber\\Console\\Commands\\ViberRegisterCommand"
     ]
 }

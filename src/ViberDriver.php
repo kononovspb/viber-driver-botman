@@ -1,6 +1,6 @@
 <?php
 
-namespace TheArdent\Drivers\Viber;
+namespace Kononovspb\Drivers\Viber;
 
 use BotMan\BotMan\Interfaces\DriverEventInterface;
 use BotMan\BotMan\Users\User;
@@ -18,20 +18,20 @@ use BotMan\BotMan\Messages\Attachments\Image;
 use BotMan\BotMan\Messages\Attachments\Location;
 use BotMan\BotMan\Messages\Attachments\Video;
 use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
-use TheArdent\Drivers\Viber\Events\MessageDelivered;
-use TheArdent\Drivers\Viber\Events\MessageFailed;
-use TheArdent\Drivers\Viber\Events\MessageSeen;
-use TheArdent\Drivers\Viber\Events\MessageStarted;
-use TheArdent\Drivers\Viber\Events\UserSubscribed;
-use TheArdent\Drivers\Viber\Events\UserUnsubscribed;
-use TheArdent\Drivers\Viber\Events\Webhook;
-use TheArdent\Drivers\Viber\Extensions\ContactTemplate;
-use TheArdent\Drivers\Viber\Extensions\FileTemplate;
-use TheArdent\Drivers\Viber\Extensions\KeyboardTemplate;
-use TheArdent\Drivers\Viber\Extensions\LinkTemplate;
-use TheArdent\Drivers\Viber\Extensions\LocationTemplate;
-use TheArdent\Drivers\Viber\Extensions\PictureTemplate;
-use TheArdent\Drivers\Viber\Extensions\VideoTemplate;
+use Kononovspb\Drivers\Viber\Events\MessageDelivered;
+use Kononovspb\Drivers\Viber\Events\MessageFailed;
+use Kononovspb\Drivers\Viber\Events\MessageSeen;
+use Kononovspb\Drivers\Viber\Events\MessageStarted;
+use Kononovspb\Drivers\Viber\Events\UserSubscribed;
+use Kononovspb\Drivers\Viber\Events\UserUnsubscribed;
+use Kononovspb\Drivers\Viber\Events\Webhook;
+use Kononovspb\Drivers\Viber\Extensions\ContactTemplate;
+use Kononovspb\Drivers\Viber\Extensions\FileTemplate;
+use Kononovspb\Drivers\Viber\Extensions\KeyboardTemplate;
+use Kononovspb\Drivers\Viber\Extensions\LinkTemplate;
+use Kononovspb\Drivers\Viber\Extensions\LocationTemplate;
+use Kononovspb\Drivers\Viber\Extensions\PictureTemplate;
+use Kononovspb\Drivers\Viber\Extensions\VideoTemplate;
 
 class ViberDriver extends HttpDriver
 {

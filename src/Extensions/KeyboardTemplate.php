@@ -1,6 +1,6 @@
 <?php
 
-namespace TheArdent\Drivers\Viber\Extensions;
+namespace Kononovspb\Drivers\Viber\Extensions;
 
 use JsonSerializable;
 

@@ -13,7 +13,7 @@ composer require polyskalov/botman-viber-driver
 Then load the driver before creating the BotMan instance (only when you don't use BotMan Studio):
 
 ```php
-DriverManager::loadDriver(\TheArdent\Drivers\Viber\ViberDriver::class);
+DriverManager::loadDriver(\Kononovspb\Drivers\Viber\ViberDriver::class);
 
 // Create BotMan instance
 BotManFactory::create($config);

@@ -1,6 +1,6 @@
 <?php
 
-namespace TheArdent\Drivers\Viber\Events;
+namespace Kononovspb\Drivers\Viber\Events;
 
 use BotMan\BotMan\Interfaces\DriverEventInterface;
 
