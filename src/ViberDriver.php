@@ -35,10 +35,10 @@ use TheArdent\Drivers\Viber\Extensions\VideoTemplate;
 
 class ViberDriver extends HttpDriver
 {
-    const DRIVER_NAME = 'Viber';
+    const DRIVER_NAME  = 'Viber';
 
     const API_ENDPOINT = 'https://chatapi.viber.com/pa/';
-    
+
     /** @var string */
     protected $signature;
 
@@ -57,11 +57,11 @@ class ViberDriver extends HttpDriver
     public function buildPayload(Request $request)
     {
 
-        $this->payload = new ParameterBag((array)json_decode($request->getContent(), true));
-        $this->content = $request->getContent();
-        $this->event = Collection::make($this->payload->get('event'), []);
+        $this->payload   = new ParameterBag((array)json_decode($request->getContent(), true));
+        $this->content   = $request->getContent();
+        $this->event     = Collection::make($this->payload->get('event'), []);
         $this->signature = $request->headers->get('X-Viber-Content-Signature', '');
-        $this->config = Collection::make($this->config->get('viber'), []);
+        $this->config    = Collection::make($this->config->get('viber'), []);
     }
 
     /**
@@ -94,8 +94,10 @@ class ViberDriver extends HttpDriver
         $event = $this->getEventFromEventData($this->payload->all());
         if ($event) {
             $this->driverEvent = $event;
+
             return $this->driverEvent;
         }
+
         return false;
     }
 
@@ -142,6 +144,7 @@ class ViberDriver extends HttpDriver
     public function getConversationAnswer(IncomingMessage $message)
     {
         $text = $message->getText();
+
         return Answer::create($text)->setMessage($message)
             ->setValue($text);
     }
@@ -189,12 +192,13 @@ class ViberDriver extends HttpDriver
         if (count($actions) > 0) {
             $keyboard = new KeyboardTemplate($question->getText());
             foreach ($actions as $action) {
-                $text = $action['text'];
-                $actionType = $action['additional']['url'] ? 'open-url' : 'reply';
-                $actionBody = $action['additional']['url'] ?? $action['value'] ?? $action['text'];
-                $silent = $action['additional']['url'] ? true : false;
-                $keyboard->addButton($text, $actionType, $actionBody,'regular', null, 6, $silent);
+                $text       = $action['text'];
+                $actionType = !empty($action['additional']['url']) ? 'open-url' : 'reply';
+                $actionBody = $action['value'];
+                $silent     = !empty($action['additional']['url']) ? false : true;
+                $keyboard->addButton($text, $actionType, $actionBody, 'regular', null, 6, $silent);
             }
+
             return $keyboard->jsonSerialize();
         }
 
@@ -292,15 +296,15 @@ class ViberDriver extends HttpDriver
         $personId = $matchingMessage->getSender();
         /** @var ParameterBag $payload */
         $payload = $matchingMessage->getPayload();
-        $name = $payload->get('sender')['name'];
+        $name    = $payload->get('sender')['name'];
         list($firstName, $lastName) = explode(' ', trim($name), 2);
+
         /*$response = $this->http->post(self::API_ENDPOINT . 'get_user_details', [], ['id' => $personId],
             $this->getHeaders());
         $userInfo = Collection::make(json_decode($response->getContent(), true)['user']);*/
 
         return new User($personId, $firstName, $lastName, $name, $payload->all());
     }
-
 
     /**
      * Low-level method to perform driver specific API requests.
@@ -324,9 +328,9 @@ class ViberDriver extends HttpDriver
     private function getBotId()
     {
         if (is_null($this->bot)) {
-            $response = $this->http->post(self::API_ENDPOINT . 'get_account_info', [], [], $this->getHeaders());
-            $bot = json_decode($response->getContent());
-            $this->bot = $bot;
+            $response    = $this->http->post(self::API_ENDPOINT . 'get_account_info', [], [], $this->getHeaders());
+            $bot         = json_decode($response->getContent());
+            $this->bot   = $bot;
             $this->botId = $bot->id;
         }
 
