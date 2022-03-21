@@ -163,7 +163,7 @@ class ViberDriver extends HttpDriver
         if (isset($this->payload->get('message')['text'])) {
             $message = new IncomingMessage($this->payload->get('message')['text'], $user, $this->getBotId(),
                 $this->payload);
-        } elseif ($this->payload->get('message')['type'] == 'location') {
+        } elseif (isset($this->payload->get('message')['type']) && $this->payload->get('message')['type'] == 'location') {
             $message = new IncomingMessage(Location::PATTERN, $user, $this->getBotId(), $this->payload);
             $message->setLocation(
                 new Location(
@@ -297,7 +297,9 @@ class ViberDriver extends HttpDriver
         /** @var ParameterBag $payload */
         $payload = $matchingMessage->getPayload();
         $name    = $payload->get('sender')['name'];
-        list($firstName, $lastName) = explode(' ', trim($name), 2);
+        $nameList = explode(' ', trim($name), 2);
+        $firstName = $nameList[0] ?? null;
+        $lastName = $nameList[1] ?? null;
 
         /*$response = $this->http->post(self::API_ENDPOINT . 'get_user_details', [], ['id' => $personId],
             $this->getHeaders());
