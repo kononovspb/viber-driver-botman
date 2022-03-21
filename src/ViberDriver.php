@@ -297,7 +297,9 @@ class ViberDriver extends HttpDriver
         /** @var ParameterBag $payload */
         $payload = $matchingMessage->getPayload();
         $name    = $payload->get('sender')['name'];
-        list($firstName, $lastName) = explode(' ', trim($name), 2);
+        $nameList = explode(' ', trim($name), 2);
+        $firstName = $nameList[0] ?? null;
+        $lastName = $nameList[1] ?? null;
 
         /*$response = $this->http->post(self::API_ENDPOINT . 'get_user_details', [], ['id' => $personId],
             $this->getHeaders());
